@@ -13,12 +13,16 @@ import (
 )
 
 func main() {
-	if len(os.Args) != 2 {
-		log.Fatalln("You need to provide one argument which points to the spec file.")
+	if len(os.Args) != 3 {
+		log.Fatalf("Usage: %s <path-to.spec> <exec-dir>\n", os.Args[0])
 	}
 	specFile := os.Args[1]
-
 	specDir, err := filepath.Abs(filepath.Dir(specFile))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	dir, err := filepath.Abs(os.Args[2])
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -65,12 +69,12 @@ func main() {
 		patchFile := patchMap[number]
 		// patchOptions := regexp.MustCompilePOSIX(`^%patch[0-9]+`).ReplaceAllString(patchLine, "")
 		patchOptions := regexp.MustCompilePOSIX(`-p[:space:]*[0-9]+`).FindString(patchLine)
-		cmd := fmt.Sprintf("/usr/bin/patch %s <%s\n", patchOptions, patchFile)
+		cmd := fmt.Sprintf(`patch --directory %q %s <%s`, dir, patchOptions, patchFile)
 		commands = append(commands, cmd)
 	}
 
 	for _, cmd := range commands {
-		fmt.Print("UPCOMING PATCH OPERATION: " + cmd)
+		fmt.Printf("NEXT PATCH: %s\n", cmd)
 		cmd := exec.Command("sh", "-c", cmd)
 		stdoutStderr, err := cmd.CombinedOutput()
 		fmt.Println(string(stdoutStderr))
