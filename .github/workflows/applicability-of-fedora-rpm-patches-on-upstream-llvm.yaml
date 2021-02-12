@@ -25,10 +25,13 @@ jobs:
         include:
           - llvm-branch: release/11.x
             fedora-rpm-branch: fc34
+            rpm: [llvm, clang, lld]
           - llvm-branch: release/11.x
             fedora-rpm-branch: fc33
+            rpm: [llvm, clang, lld]
           - llvm-branch: release/10.x
             fedora-rpm-branch: fc32
+            rpm: [llvm, clang, lld]
     steps:
       - uses: actions/setup-go@v2
         with:
