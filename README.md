@@ -21,7 +21,7 @@ Let's verify that all the packages we maintain in Fedora rawhide for clang can s
 We need
 
 1. this project,
-1. the rpm repo
+1. the clang RPM repo
 1. and the LLVM source tree,
 
 so let's check them out into their own directories. It doesn't matter where you do this.
