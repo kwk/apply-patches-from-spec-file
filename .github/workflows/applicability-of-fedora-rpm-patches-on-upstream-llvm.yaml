@@ -22,14 +22,24 @@ jobs:
         fedora-rpm-branch: [rawhide, fc34, fc33, fc32]
         rpm: [llvm, clang, lld]
         exclude:
-          - llvm-branch: release/11.x
-            fedora-rpm-branch: [rawhide, fc32]
-    
           - llvm-branch: main
-            fedora-rpm-branch: [fc34, fc33, fc32]
+            fedora-rpm-branch: fc34
+          - llvm-branch: main
+            fedora-rpm-branch: fc33
+          - llvm-branch: main
+            fedora-rpm-branch: fc32
 
           - llvm-branch: release/11.x
-            fedora-rpm-branch: [rawhide, fc34, fc33]
+            fedora-rpm-branch: rawhide
+          - llvm-branch: release/11.x
+            fedora-rpm-branch: fc32
+
+          - llvm-branch: release/10.x
+            fedora-rpm-branch: rawhide
+          - llvm-branch: release/10.x
+            fedora-rpm-branch: fc34
+          - llvm-branch: release/10.x
+            fedora-rpm-branch: fc33
     steps:
       - uses: actions/setup-go@v2
         with:
