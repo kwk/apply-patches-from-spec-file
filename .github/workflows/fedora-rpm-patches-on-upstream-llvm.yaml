@@ -60,5 +60,4 @@ jobs:
           name: Fedora RPM patches applicability on upstream LLVM
           url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
           status: ${{ job.status }}
-          info: Enter useful text here :)
         if: always()
