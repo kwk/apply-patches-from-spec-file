@@ -2,12 +2,13 @@ name: Applicability of Fedora RPM patches on upstream LLVM
 
 on:
   schedule:
-    # Every 6 minute(s)
+    # Every weekday at 00:00
     # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events
-    - cron:  '*/6 * * * *'
+    - cron:  '0 0 * * 1-5'
 
+  # Uncomment to be able to trigger the workflow manually
   # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#manual-events
-  workflow_dispatch: {}
+  # workflow_dispatch: {}
     
 jobs:
   apply-patches:
@@ -20,7 +21,7 @@ jobs:
       matrix:
         llvm-branch: [main, release/11.x, release/10.x]
         fedora-rpm-branch: [rawhide, f34, f33, f32]
-        rpm: [llvm, clang, lld]
+        rpm: [llvm, clang, lld, compiler-rt, libcxx, libcxxabi, libomp, libunwind, lldb, llvm-test-suite, polly]
         exclude:
           - llvm-branch: main
             fedora-rpm-branch: f34
