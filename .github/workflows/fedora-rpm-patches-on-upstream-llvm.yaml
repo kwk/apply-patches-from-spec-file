@@ -1,4 +1,4 @@
-name: fedora-rawhide-rpm-patches-on-upstream-llvm
+name: fedora-rpm-patches-on-upstream-llvm
 
 on:
   schedule:
@@ -16,12 +16,16 @@ on:
     # - cron: "  * 16 * * *"
     # At the end of every day
     # 0 0 * * *
-    # Every 5 minutes
-    - cron: "*/5 * * * *"
+    # Every 5 minute(s)
+    - cron: "*/1 * * * *"
     
 jobs:
   apply-patches:
     runs-on: [ubuntu-latest]
+    strategy:
+      matrix:
+        llvm-branch: [main, release/12.x, release/11.x, release/10.x]
+        fedora-rpm-branch: [rawhide, f34, f33, f32]
     steps:
       - uses: actions/setup-go@v2
         with:
@@ -34,46 +38,28 @@ jobs:
           path: main
           ref: main
 
-      - name: Checkout RPM repo for llvm
-        uses: actions/checkout@v2
-        with:
-          repository: https://src.fedoraproject.org/rpms/llvm.git
-          path: rpm-llvm
-          ref: rawhide
-
-      - name: Checkout RPM repo for clang
-        uses: actions/checkout@v2
-        with:
-          repository: https://src.fedoraproject.org/rpms/clang.git
-          path: rpm-clang
-          ref: rawhide
-
-      - name: Checkout RPM repo for lld
-        uses: actions/checkout@v2
-        with:
-          repository: https://src.fedoraproject.org/rpms/lld.git
-          path: rpm-lld
-          ref: rawhide
-
       - name: Checkout LLVM monorepo
         uses: actions/checkout@v2
         with:
           repository: llvm/llvm-project
           path: llvm-project
-          ref: main
+          ref: ${{ matrix.llvm-branch }}
 
       - name: Check if all LLVM patches can be applied to the latest LLVM monorepo
         shell: bash
         run: |
+          git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/llvm.git rpm-llvm
           go run main/main.go rpm-llvm/llvm.spec llvm-project/llvm
           
 
       - name: Check if all clang patches can be applied to the latest LLVM monorepo
         shell: bash
         run: |
+          git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/clang.git rpm-clang
           go run main/main.go rpm-clang/clang.spec llvm-project/clang
 
       - name: Check if all lldf patches can be applied to the latest LLVM monorepo
         shell: bash
         run: |
+          git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/lld.git rpm-lld
           go run main/main.go rpm-lld/lld.spec llvm-project/lld
