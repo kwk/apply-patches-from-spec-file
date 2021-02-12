@@ -2,22 +2,12 @@ name: fedora-rpm-patches-on-upstream-llvm
 
 on:
   schedule:
-    #
-    #          ┌───────────── minute (0 - 59)
-    #          │ ┌───────────── hour (0 - 23)
-    #          │ │ ┌───────────── day of the month (1 - 31)
-    #          │ │ │ ┌───────────── month (1 - 12)
-    #          │ │ │ │ ┌───────────── day of the week (0 - 6)
-    #          │ │ │ │ │                                   
-    #          │ │ │ │ │
-    #          │ │ │ │ │
-    #          * * * * *
-    # Run every day at 16 o'clock
-    # - cron: "  * 16 * * *"
-    # At the end of every day
-    # 0 0 * * *
-    # Every 5 minute(s)
-    - cron: "*/1 * * * *"
+    # Every 6 minute(s)
+    # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events
+    - cron:  '*/6 * * * *'
+
+  # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#manual-events
+  workflow_dispatch: {}
     
 jobs:
   apply-patches:
