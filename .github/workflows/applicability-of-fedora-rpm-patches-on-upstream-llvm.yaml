@@ -18,20 +18,18 @@ jobs:
       fail-fast: false
       # Always test the latest LLVM (main branch) on the latest Fedora (rawhide) branch
       matrix:
-        llvm-branch: [main]
-        fedora-rpm-branch: [rawhide]
+        llvm-branch: [main, release/11.x, release/10.x]
+        fedora-rpm-branch: [rawhide, fc34, fc33, fc32]
         rpm: [llvm, clang, lld]
-        # See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#example-including-additional-values-into-combinations
-        include:
+        exclude:
           - llvm-branch: release/11.x
-            fedora-rpm-branch: fc34
-            rpm: [llvm, clang, lld]
+            fedora-rpm-branch: [rawhide, fc32]
+    
+          - llvm-branch: main
+            fedora-rpm-branch: [fc34, fc33, fc32]
+
           - llvm-branch: release/11.x
-            fedora-rpm-branch: fc33
-            rpm: [llvm, clang, lld]
-          - llvm-branch: release/10.x
-            fedora-rpm-branch: fc32
-            rpm: [llvm, clang, lld]
+            fedora-rpm-branch: [rawhide, fc34, fc33]
     steps:
       - uses: actions/setup-go@v2
         with:
