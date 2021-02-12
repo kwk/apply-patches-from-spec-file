@@ -1,5 +1,3 @@
-![fedora-rpm-patches-on-upstream-llvm](https://github.com/kwk/apply-patches-from-spec-file/workflows/fedora-rpm-patches-on-upstream-llvm/badge.svg?branch=main)
-
 # Purpose
 
 At Red Hat the big [LLVM project](https://github.com/llvm/llvm-project) is packaged into multiple sub-packages (e.g. [`clang`](https://src.fedoraproject.org/rpms/clang.git), [`lld`](https://src.fedoraproject.org/rpms/lld.git), [`lldb`](https://src.fedoraproject.org/rpms/lldb.git)) and before the actual build, the sourecode is patched.
