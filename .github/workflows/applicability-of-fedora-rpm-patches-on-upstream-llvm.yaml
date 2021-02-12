@@ -68,7 +68,7 @@ jobs:
           go run main/main.go rpm-${{ matrix.rpm }}/${{ matrix.rpm }}.spec llvm-project/${{ matrix.rpm }}
 
       - name: Google Chat Notification for llvm package
-        if: failure()
+        if: failure() && ${{ matrix.llvm-branch }} == "main" && ${{ matrix.fedora-rpm-branch }} == "rawhide"
         uses: Co-qn/google-chat-notification@releases/v1
         with:
           name: The Fedora ${{ matrix.fedora-rpm-branch }} "${{ matrix.rpm }}" RPMs contain patches that can not be applied to upstream LLVM (branch=${{ matrix.llvm-branch}})
