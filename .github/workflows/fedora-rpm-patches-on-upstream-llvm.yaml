@@ -63,3 +63,12 @@ jobs:
         run: |
           git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/lld.git rpm-lld
           go run main/main.go rpm-lld/lld.spec llvm-project/lld
+      
+      - name: Google Chat Notification
+        uses: Co-qn/google-chat-notification@releases/v1
+        with:
+          name: Fedora RPM patches applicability on upstream LLVM
+          url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
+          status: ${{ job.status }}
+          info: Enter useful text here :)
+        if: always()
