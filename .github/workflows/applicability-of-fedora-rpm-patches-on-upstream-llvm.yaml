@@ -13,13 +13,26 @@ jobs:
   apply-patches:
     runs-on: [ubuntu-latest]
     strategy:
+      # Don't cancel any in-progress jobs if any matrix job fails
+      # See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#jobsjob_idstrategyfail-fast
+      fail-fast: false
+      # Always test the latest LLVM (main branch) on the latest Fedora (rawhide) branch
       matrix:
         llvm-branch: [main]
         fedora-rpm-branch: [rawhide]
+        rpm: [llvm, clang, lld]
+      # See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#example-including-additional-values-into-combinations
+      include:
+        - llvm-branch: release/11.x
+          fedora-rpm-branch: fc34
+        - llvm-branch: release/11.x
+          fedora-rpm-branch: fc33
+        - llvm-branch: release/10.x
+          fedora-rpm-branch: fc32
     steps:
       - uses: actions/setup-go@v2
         with:
-          go-version: '1.14' # The Go version to download (if necessary) and use.
+          go-version: '1.15' # The Go version to download (if necessary) and use.
 
       # https://github.com/actions/checkout
       - name: Checkout this repo
@@ -35,32 +48,17 @@ jobs:
           path: llvm-project
           ref: ${{ matrix.llvm-branch }}
 
-      - name: Check if all LLVM patches can be applied to the LLVM monorepo
+      - name: "Apply Fedora ${{ matrix.fedora-rpm-branch }} patches of the ${{ matrix.rpm }} RPMs to the LLVM (branch=${{ matrix.llvm-branch}})"
         if: always()
         shell: bash
         run: |
-          git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/llvm.git rpm-llvm
-          go run main/main.go rpm-llvm/llvm.spec llvm-project/llvm
-          
+          git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/${{ matrix.rpm }}.git rpm-${{ matrix.rpm }}
+          go run main/main.go rpm-${{ matrix.rpm }}/${{ matrix.rpm }}.spec llvm-project/${{ matrix.rpm }}
 
-      - name: Check if all Clang patches can be applied to the LLVM monorepo
-        if: always()
-        shell: bash
-        run: |
-          git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/clang.git rpm-clang
-          go run main/main.go rpm-clang/clang.spec llvm-project/clang
-
-      - name: Check if all lld patches can be applied to the LLVM monorepo
-        if: always()
-        shell: bash
-        run: |
-          git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/lld.git rpm-lld
-          go run main/main.go rpm-lld/lld.spec llvm-project/lld
-      
-      - name: Google Chat Notification
-        if: always()
+      - name: Google Chat Notification for llvm package
+        if: failure()
         uses: Co-qn/google-chat-notification@releases/v1
         with:
-          name: Applicability of Fedora RPM patches on upstream LLVM
+          name: The Fedora ${{ matrix.fedora-rpm-branch }} "${{ matrix.rpm }}" RPMs contain patches that can not be applied to upstream LLVM (branch=${{ matrix.llvm-branch}})
           url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
           status: ${{ job.status }}
