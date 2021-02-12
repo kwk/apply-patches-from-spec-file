@@ -36,28 +36,31 @@ jobs:
           ref: ${{ matrix.llvm-branch }}
 
       - name: Check if all LLVM patches can be applied to the LLVM monorepo
+        if: always()
         shell: bash
         run: |
           git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/llvm.git rpm-llvm
           go run main/main.go rpm-llvm/llvm.spec llvm-project/llvm
           
 
-      - name: Check if all clang patches can be applied to the LLVM monorepo
+      - name: Check if all Clang patches can be applied to the LLVM monorepo
+        if: always()
         shell: bash
         run: |
           git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/clang.git rpm-clang
           go run main/main.go rpm-clang/clang.spec llvm-project/clang
 
       - name: Check if all lld patches can be applied to the LLVM monorepo
+        if: always()
         shell: bash
         run: |
           git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/lld.git rpm-lld
           go run main/main.go rpm-lld/lld.spec llvm-project/lld
       
       - name: Google Chat Notification
+        if: always()
         uses: Co-qn/google-chat-notification@releases/v1
         with:
           name: Applicability of Fedora RPM patches on upstream LLVM
           url: ${{ secrets.GOOGLE_CHAT_WEBHOOK }}
           status: ${{ job.status }}
-        if: always()
