@@ -21,14 +21,14 @@ jobs:
         llvm-branch: [main]
         fedora-rpm-branch: [rawhide]
         rpm: [llvm, clang, lld]
-      # See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#example-including-additional-values-into-combinations
-      include:
-        - llvm-branch: release/11.x
-          fedora-rpm-branch: fc34
-        - llvm-branch: release/11.x
-          fedora-rpm-branch: fc33
-        - llvm-branch: release/10.x
-          fedora-rpm-branch: fc32
+        # See https://docs.github.com/en/actions/reference/workflow-syntax-for-github-actions#example-including-additional-values-into-combinations
+        include:
+          - llvm-branch: release/11.x
+            fedora-rpm-branch: fc34
+          - llvm-branch: release/11.x
+            fedora-rpm-branch: fc33
+          - llvm-branch: release/10.x
+            fedora-rpm-branch: fc32
     steps:
       - uses: actions/setup-go@v2
         with:
