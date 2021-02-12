@@ -19,27 +19,27 @@ jobs:
       # Always test the latest LLVM (main branch) on the latest Fedora (rawhide) branch
       matrix:
         llvm-branch: [main, release/11.x, release/10.x]
-        fedora-rpm-branch: [rawhide, fc34, fc33, fc32]
+        fedora-rpm-branch: [rawhide, f34, f33, f32]
         rpm: [llvm, clang, lld]
         exclude:
           - llvm-branch: main
-            fedora-rpm-branch: fc34
+            fedora-rpm-branch: f34
           - llvm-branch: main
-            fedora-rpm-branch: fc33
+            fedora-rpm-branch: f33
           - llvm-branch: main
-            fedora-rpm-branch: fc32
+            fedora-rpm-branch: f32
 
           - llvm-branch: release/11.x
             fedora-rpm-branch: rawhide
           - llvm-branch: release/11.x
-            fedora-rpm-branch: fc32
+            fedora-rpm-branch: f32
 
           - llvm-branch: release/10.x
             fedora-rpm-branch: rawhide
           - llvm-branch: release/10.x
-            fedora-rpm-branch: fc34
+            fedora-rpm-branch: f34
           - llvm-branch: release/10.x
-            fedora-rpm-branch: fc33
+            fedora-rpm-branch: f33
     steps:
       - uses: actions/setup-go@v2
         with:
