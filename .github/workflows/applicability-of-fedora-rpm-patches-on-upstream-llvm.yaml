@@ -14,8 +14,8 @@ jobs:
     runs-on: [ubuntu-latest]
     strategy:
       matrix:
-        llvm-branch: [main, release/12.x, release/11.x, release/10.x]
-        fedora-rpm-branch: [rawhide, f34, f33, f32]
+        llvm-branch: [main]
+        fedora-rpm-branch: [rawhide]
     steps:
       - uses: actions/setup-go@v2
         with:
@@ -35,20 +35,20 @@ jobs:
           path: llvm-project
           ref: ${{ matrix.llvm-branch }}
 
-      - name: Check if all LLVM patches can be applied to the latest LLVM monorepo
+      - name: Check if all LLVM patches can be applied to the LLVM monorepo
         shell: bash
         run: |
           git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/llvm.git rpm-llvm
           go run main/main.go rpm-llvm/llvm.spec llvm-project/llvm
           
 
-      - name: Check if all clang patches can be applied to the latest LLVM monorepo
+      - name: Check if all clang patches can be applied to the LLVM monorepo
         shell: bash
         run: |
           git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/clang.git rpm-clang
           go run main/main.go rpm-clang/clang.spec llvm-project/clang
 
-      - name: Check if all lld patches can be applied to the latest LLVM monorepo
+      - name: Check if all lld patches can be applied to the LLVM monorepo
         shell: bash
         run: |
           git clone --depth 1 -b ${{ matrix.fedora-rpm-branch }} https://src.fedoraproject.org/rpms/lld.git rpm-lld
