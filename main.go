@@ -69,7 +69,7 @@ func main() {
 		patchFile := patchMap[number]
 		// patchOptions := regexp.MustCompilePOSIX(`^%patch[0-9]+`).ReplaceAllString(patchLine, "")
 		patchOptions := regexp.MustCompilePOSIX(`-p[:space:]*[0-9]+`).FindString(patchLine)
-		cmd := fmt.Sprintf(`patch --directory %q %s <%s`, dir, patchOptions, patchFile)
+		cmd := fmt.Sprintf(`patch --verbose --directory %q %s <%s`, dir, patchOptions, patchFile)
 		commands = append(commands, cmd)
 	}
 
