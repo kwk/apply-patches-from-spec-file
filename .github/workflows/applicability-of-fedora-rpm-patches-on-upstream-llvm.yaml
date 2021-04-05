@@ -1,10 +1,10 @@
 name: Applicability of Fedora RPM patches on upstream LLVM
 
 on:
-  schedule:
+  #schedule:
     # Every weekday at 00:00
     # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#scheduled-events
-    - cron:  '0 0 * * 1-5'
+    #- cron:  '0 0 * * 1-5'
 
   # Uncomment to be able to trigger the workflow manually
   # See https://docs.github.com/en/actions/reference/events-that-trigger-workflows#manual-events
