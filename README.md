@@ -1,3 +1,5 @@
+**THIS REPO IS ARCHIVED**
+
 ![Applicability of Fedora RPM patches on upstream LLVM](https://github.com/kwk/apply-patches-from-spec-file/workflows/Applicability%20of%20Fedora%20RPM%20patches%20on%20upstream%20LLVM/badge.svg)
 
 # Purpose
